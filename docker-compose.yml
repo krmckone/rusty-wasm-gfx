@@ -2,7 +2,6 @@ services:
   wasm-web:
     image: ghcr.io/krmckone/rusty-wasm-gfx:latest
     container_name: wasm-nginx
-    build: .
     ports:
       - "8080:80"
     restart: unless-stopped
