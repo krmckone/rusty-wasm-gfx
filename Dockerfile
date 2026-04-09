@@ -5,7 +5,7 @@ RUN curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 WORKDIR /usr/src/app
 COPY Cargo.toml Cargo.lock ./
 COPY src ./src
-RUN wasm-pack build --target web --release
+RUN trunk build --release
 
 FROM nginx:alpine
 
