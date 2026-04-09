@@ -17,9 +17,10 @@ services:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN} # from the .env
 
   watchtower:
-    image: containrrr/watchtower
-    container_name: watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    command: --interval 300 wasm-nginx
-    restart: unless-stopped
+      image: containrrr/watchtower:latest
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+      command: --interval 500 wasm-nginx
+      environment:
+        - DOCKER_API_VERSION=1.52
+      restart: always
