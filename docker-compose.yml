@@ -1,0 +1,28 @@
+secrets:
+  cloudflare_tunnel_token:
+    file: ./.cloudflare_tunnel_token.txt
+
+services:
+  wasm-web:
+    image: ghcr.io/krmckone/rusty-wasm-gfx:latest
+    container_name: wasm-nginx
+    restart: unless-stopped
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cf-tunnel
+    restart: unless-stopped
+    command: tunnel run
+    secrets:
+      - cloudflare_tunnel_token
+    depends_on:
+      - wasm-web
+    command: tunnel --no-autoupdate run --token $(cat /run/secrets/cloudflare_tunnel_token)
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 300 wasm-nginx
+    restart: unless-stopped
