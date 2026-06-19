@@ -1,0 +1,31 @@
+{
+  "name": "Rusty WASM GFX Dev Environment",
+  "image": "mcr.microsoft.com/devcontainers/rust:1-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "rust-lang.rust-analyzer",
+        "tamasfe.even-better-toml",
+        "serayuzgur.crates",
+        "vadimcn.vscode-lldb"
+      ],
+      "settings": {
+        "build.targetDir": true,
+        "rust-analyzer.check.command": "clippy",
+        "rust-analyzer.cargo.targetDir": true,
+        "editor.formatOnSave": true,
+        "rust-analyzer.cargo.target": "wasm32-unknown-unknown"
+      }
+    }
+  },
+  "mounts": [
+    "source=rust-cargo-cache,target=/usr/local/cargo/registry,type=volume",
+    "source=rust-target-cache,target=${containerWorkspaceFolder}/target,type=volume"
+  ],
+  "remoteUser": "vscode",
+  // 1. Fixes volume permissions, 2. Adds WASM target, 3. Installs Trunk globally
+  "updateContentCommand": "sudo chown -R vscode:vscode /usr/local/cargo ${containerWorkspaceFolder}/target && rustup target add wasm32-unknown-unknown && cargo install trunk"
+}
